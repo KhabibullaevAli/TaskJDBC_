@@ -1,0 +1,7 @@
+--insert into users (name, age, email) values ('bbb222', 29, 'aaafgsfdv');
+--insert into users (name, age, email) values ('gggAli2111', 33, 'ffdgfdgdfgdcvbcvsfdv');
+--select name, age from users where name = "Ali2";
+--update users set name = 'AliKhabibullaev', age = 40 where id=1;
+--select * from users where name = "Ali2";
+--#delete from users where id=2;
+--insert into users (name, age, email) values ('Ali3', 33, 'vsfdv')
