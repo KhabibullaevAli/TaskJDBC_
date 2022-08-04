@@ -16,6 +16,7 @@ public class UserServiceTest {
 
     @Test
     public void dropUsersTable() {
+        System.out.println("drop");
         try {
             userService.dropUsersTable();
             userService.dropUsersTable();
@@ -26,6 +27,7 @@ public class UserServiceTest {
 
     @Test
     public void createUsersTable() {
+        System.out.println("Create");
         try {
             userService.dropUsersTable();
             userService.createUsersTable();
@@ -36,6 +38,7 @@ public class UserServiceTest {
 
     @Test
     public void saveUser() {
+        System.out.println("Save");
         try {
             userService.dropUsersTable();
             userService.createUsersTable();
@@ -57,6 +60,7 @@ public class UserServiceTest {
 
     @Test
     public void removeUserById() {
+        System.out.println("Remove");
         try {
             userService.dropUsersTable();
             userService.createUsersTable();
@@ -69,6 +73,7 @@ public class UserServiceTest {
 
     @Test
     public void getAllUsers() {
+        System.out.println("GetAll");
         try {
             userService.dropUsersTable();
             userService.createUsersTable();
@@ -85,6 +90,7 @@ public class UserServiceTest {
 
     @Test
     public void cleanUsersTable() {
+        System.out.println("Clean");
         try {
             userService.dropUsersTable();
             userService.createUsersTable();
