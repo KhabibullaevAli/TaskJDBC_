@@ -9,23 +9,13 @@ import java.util.List;
 
 public class UserDaoJDBCImpl implements UserDao {
     private Connection connection;
-    private Statement statement;
-    //    private PreparedStatement prepStatAddingUser;
-    private PreparedStatement prepStatRemovingUser;
 
     public UserDaoJDBCImpl() {
         connection = Util.getConnection();
-        try {
-            this.statement = connection.createStatement();
-//            prepStatAddingUser = connection.prepareStatement("insert into users (name, lastName, age) values (?,?,?)");
-            prepStatRemovingUser = connection.prepareStatement("delete from users where id = ?");
-        } catch (SQLException throwables) {
-            System.out.println("Cant get statement");
-        }
     }
 
     public void createUsersTable() {
-        try {
+        try (Statement statement = connection.createStatement()) {
             statement.execute("CREATE TABLE IF NOT EXISTS `pp_bd_113`.`users` " +
                     "(`id` INT NOT NULL AUTO_INCREMENT," +
                     "`name` VARCHAR(45) NOT NULL," +
@@ -38,7 +28,7 @@ public class UserDaoJDBCImpl implements UserDao {
     }
 
     public void dropUsersTable() {
-        try {
+        try (Statement statement = connection.createStatement()) {
             statement.executeUpdate("DROP TABLE `users`");
         } catch (SQLException throwables) {
             System.out.println("Cant dropUsersTable");
@@ -47,12 +37,12 @@ public class UserDaoJDBCImpl implements UserDao {
     }
 
     public void saveUser(String name, String lastName, byte age) {
-        try {
-            statement.executeUpdate("insert into users (name, lastName, age) values ('" + name + "','" + lastName + "'," + age + ")");
-//            prepStatAddingUser.setString(1, name);
-//            prepStatAddingUser.setString(2, lastName);
-//            prepStatAddingUser.setInt(3, age);
-//            prepStatAddingUser.execute();
+        try (PreparedStatement prepStatAddingUser = connection.prepareStatement("insert into users (name, lastName, age) values (?,?,?)")) {
+//            statement.executeUpdate("insert into users (name, lastName, age) values ('" + name + "','" + lastName + "'," + age + ")");
+            prepStatAddingUser.setString(1, name);
+            prepStatAddingUser.setString(2, lastName);
+            prepStatAddingUser.setInt(3, age);
+            prepStatAddingUser.execute();
             System.out.println("User с именем – " + name + " добавлен в базу данных");
         } catch (SQLException throwables) {
             System.out.println("Cant saveUser");
@@ -60,7 +50,7 @@ public class UserDaoJDBCImpl implements UserDao {
     }
 
     public void removeUserById(long id) {
-        try {
+        try (PreparedStatement prepStatRemovingUser = connection.prepareStatement("delete from users where id = ?")) {
             prepStatRemovingUser.setLong(1, id);
             prepStatRemovingUser.execute();
         } catch (SQLException throwables) {
@@ -70,7 +60,7 @@ public class UserDaoJDBCImpl implements UserDao {
 
     public List<User> getAllUsers() {
         List<User> list = new LinkedList<>();
-        try {
+        try (Statement statement = connection.createStatement()) {
             ResultSet resultSet = statement.executeQuery("select * from users");
             while (resultSet.next()) {
                 User user = new User();
@@ -87,9 +77,9 @@ public class UserDaoJDBCImpl implements UserDao {
     }
 
     public void cleanUsersTable() {
-        try {
-            statement.executeUpdate("delete from users");
-//            statement.executeUpdate("truncate table users");
+        try (Statement statement = connection.createStatement()) {
+//            statement.executeUpdate("delete from users"); //Made the same the next line
+            statement.executeUpdate("truncate table users");
         } catch (SQLException throwables) {
             System.out.println("Cant cleanUsersTable");
         }

@@ -5,7 +5,7 @@ import jm.task.core.jdbc.dao.UserDaoJDBCImpl;
 import jm.task.core.jdbc.model.User;
 import jm.task.core.jdbc.service.UserService;
 import jm.task.core.jdbc.service.UserServiceImpl;
-
+// Создал бренч Hibernate и перешел на него(checkout)
 import java.util.List;
 
 public class Main {
@@ -25,17 +25,6 @@ public class Main {
         }
         userDao.cleanUsersTable();
         userDao.dropUsersTable();
-
-
-//        UserService userService = new UserServiceImpl();
-//        userService.dropUsersTable();
-//        userService.createUsersTable();
-//        userService.saveUser("testName", "testLastName", (byte) 19);
-//        List<User> userList = userService.getAllUsers();
-//        for (User user:userList) {
-//            System.out.println(user);
-//        }
-//        userService.cleanUsersTable();
 
     }
 }
