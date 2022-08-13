@@ -2,34 +2,33 @@ package jm.task.core.jdbc.dao;
 
 import jm.task.core.jdbc.model.User;
 import jm.task.core.jdbc.util.Util;
-
 import java.sql.*;
 import java.util.LinkedList;
 import java.util.List;
 
 public class UserDaoJDBCImpl implements UserDao {
-    private Connection connection;
+    private final Connection connection;
 
     public UserDaoJDBCImpl() {
         connection = Util.getConnection();
     }
 
     public void createUsersTable() {
-        try (Statement statement = connection.createStatement()) {
-            statement.execute("CREATE TABLE IF NOT EXISTS `pp_bd_113`.`users` " +
+        try (PreparedStatement prepStat = connection.prepareStatement("CREATE TABLE IF NOT EXISTS `pp_bd_113`.`users` " +
                     "(`id` INT NOT NULL AUTO_INCREMENT," +
                     "`name` VARCHAR(45) NOT NULL," +
                     "`lastName` VARCHAR(45) NOT NULL," +
                     "`age` INT(3) NOT NULL, " +
-                    "PRIMARY KEY (`id`), UNIQUE INDEX `id_UNIQUE` (`id` ASC) VISIBLE)");
+                    "PRIMARY KEY (`id`), UNIQUE INDEX `id_UNIQUE` (`id` ASC) VISIBLE)")) {
+            prepStat.execute();
         } catch (SQLException throwables) {
             System.out.println("Cant create UsersTable");
         }
     }
 
     public void dropUsersTable() {
-        try (Statement statement = connection.createStatement()) {
-            statement.executeUpdate("DROP TABLE `users`");
+        try (PreparedStatement prepStat = connection.prepareStatement("DROP TABLE `users`")) {
+            prepStat.execute();
         } catch (SQLException throwables) {
             System.out.println("Cant dropUsersTable");
         }
@@ -38,7 +37,6 @@ public class UserDaoJDBCImpl implements UserDao {
 
     public void saveUser(String name, String lastName, byte age) {
         try (PreparedStatement prepStatAddingUser = connection.prepareStatement("insert into users (name, lastName, age) values (?,?,?)")) {
-//            statement.executeUpdate("insert into users (name, lastName, age) values ('" + name + "','" + lastName + "'," + age + ")");
             prepStatAddingUser.setString(1, name);
             prepStatAddingUser.setString(2, lastName);
             prepStatAddingUser.setInt(3, age);
@@ -77,9 +75,8 @@ public class UserDaoJDBCImpl implements UserDao {
     }
 
     public void cleanUsersTable() {
-        try (Statement statement = connection.createStatement()) {
-//            statement.executeUpdate("delete from users"); //Made the same the next line
-            statement.executeUpdate("truncate table users");
+        try (PreparedStatement preparedStatement = connection.prepareStatement("truncate table users")) {
+            preparedStatement.execute();
         } catch (SQLException throwables) {
             System.out.println("Cant cleanUsersTable");
         }
